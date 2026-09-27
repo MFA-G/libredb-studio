@@ -2881,6 +2881,7 @@ A Kafka connection is kept out by the `offersSshTunnel` gate of `buildConnection
 
 Found 2026-09-24 while adding the Kafka connection's tunnel gate (#1088, section 6.1).
 Not fixed there: the reset is shared by every engine's dialog.
+Narrowed by #1125: closing the dialog on a new connection now resets every SSH field from `CONNECTION_FORM_DEFAULTS`, so what remains is the edit path, where closing keeps the edit target's state on purpose and the next edit target without a tunnel does not overwrite it.
 
 **Done when:** loading an edit target sets every SSH field from it, the reset on close clears them, and a hook test edits a tunnelled connection, closes the dialog, edits one without a tunnel and finds the switch off and every SSH field empty.
 
