@@ -115,8 +115,8 @@ function preservedFields<T extends object>(
  * The connection-scoped fields of a new connection, as the dialog first shows them.
  *
  * One object both seeds the state and drives the reset on close (#1125), so a field
- * added here cannot be left out of the reset: the reset walks a setter map typed as
- * `Record<keyof typeof CONNECTION_FORM_DEFAULTS, ...>`, which fails `bun run typecheck`
+ * added here cannot be left out of the reset: the reset walks a setter map whose type is
+ * mapped over `keyof typeof CONNECTION_FORM_DEFAULTS`, which fails `bun run typecheck`
  * until the new field has a setter. Before this object the reset was a hand-kept list,
  * and it missed the TLS, SSH, environment and Advanced fields, so the next new
  * connection was tested and saved with the previous one's certificates and tunnel.
@@ -295,7 +295,7 @@ export function useConnectionForm({ isOpen, onConnect, editConnection, onTestCon
   const [sshPrivateKey, setSSHPrivateKey] = useState(D.sshPrivateKey);
   const [sshPassphrase, setSSHPassphrase] = useState(D.sshPassphrase);
 
-  // Every connection-scoped setter, keyed like the defaults. A `Record` over the defaults'
+  // Every connection-scoped setter, keyed like the defaults. A mapped type over the defaults'
   // keys, so a field added to CONNECTION_FORM_DEFAULTS without a setter here fails the
   // typecheck instead of silently surviving the reset below.
   const resetSetters: { [K in keyof ConnectionFormDefaults]: (value: ConnectionFormDefaults[K]) => void } = {
